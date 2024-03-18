@@ -14,6 +14,7 @@ XRAY_CONFIG = "/usr/local/etc/xray/config.json"
 
 # Functions
 def display_banner():
+    os.system("clear")
     url = "https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/logo.txt"
     response = requests.get(url)
     if response.status_code == 200:
