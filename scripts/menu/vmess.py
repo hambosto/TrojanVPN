@@ -222,9 +222,9 @@ def create_vmess():
         "tls": "tls",
     }
 
-    encoded_tls = base64.b64encode(json.dumps(vmess_tls).encode()).decode()
-    encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
-    encoded_grpc = base64.b64encode(json.dumps(vmess_grpc).encode()).decode()
+    encoded_tls = f"vmess://{base64.b64encode(json.dumps(vmess_tls).encode()).decode()}"
+    encoded_non_tls = f"vmess://{base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()"
+    encoded_grpc = f"vmess://{base64.b64encode(json.dumps(vmess_grpc).encode()).decode()"
 
     print("---------------------------------------------------")
     print("Remarks           :", username)
