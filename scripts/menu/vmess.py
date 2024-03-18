@@ -3,18 +3,17 @@ import subprocess
 import os
 import base64
 from datetime import datetime, timedelta
-from tabulate import tabulate
 from rich.prompt import IntPrompt, Prompt
 import requests
 
 # Constants
-USERS_FILE = "/usr/local/etc/xray/users.db"
-XRAY_CONFIG = "/usr/local/etc/xray/config.json"
+USERS_FILE = "users.db"
+XRAY_CONFIG = "config.json"
 
 
 # Functions
 def display_banner():
-    url = "https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/logo"
+    url = "https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/logo.txt"
     response = requests.get(url)
     if response.status_code == 200:
         print(response.text)
@@ -55,7 +54,6 @@ def renew_vmess():
     if not vmess_clients:
         print("No existing VMESS clients found.")
         input("Press [Enter] to go back to the menu")
-        menu_vmess()
         return
 
     display_vmess_clients(vmess_clients)
@@ -81,7 +79,6 @@ def renew_vmess():
     print("---------------------------------------------------")
 
     input("Press [Enter] to go back to the menu")
-    menu_vmess()
 
 
 def delete_vmess():
@@ -128,7 +125,6 @@ def delete_vmess():
     print("---------------------------------------------------")
 
     input("Press any key to go back to the menu")
-    menu_vmess()
 
 
 def create_vmess():
@@ -137,12 +133,10 @@ def create_vmess():
 
     while True:
         username = Prompt.ask("Username")
-        username = (
-            f"TrojanVPN-{username}-VMESS"  # just to make sure the username is unique
-        )
         existing_users = load_json_file(USERS_FILE)
+        vmess_users = existing_users.setdefault("vmess", [])
         existing_user = next(
-            (user for user in existing_users["vmess"] if user["user"] == username), None
+            (user for user in vmess_users if user["user"] == username), None
         )
 
         if existing_user:
@@ -161,20 +155,15 @@ def create_vmess():
     today = datetime.now().strftime("%Y-%m-%d")
 
     new_user = {"user": username, "uuid": uuid, "expiry": expiration_date}
-    existing_users.append(new_user)
+    vmess_users.append(new_user)
     save_json_file(existing_users, USERS_FILE)
 
     config_data = load_json_file(XRAY_CONFIG)
 
-    config_data["inbounds"][3]["settings"]["clients"].append(
-        {"id": uuid, "alterId": 0, "email": username}
-    )
-    config_data["inbounds"][6]["settings"]["clients"].append(
-        {"id": uuid, "alterId": 0, "email": username}
-    )
-    config_data["inbounds"][8]["settings"]["clients"].append(
-        {"id": uuid, "alterId": 0, "email": username}
-    )
+    for index in [3, 6, 8]:
+        config_data["inbounds"][index]["settings"]["clients"].append(
+            {"id": uuid, "alterId": 0, "email": username}
+        )
 
     save_json_file(config_data, XRAY_CONFIG)
 
@@ -245,7 +234,6 @@ def create_vmess():
     print("---------------------------------------------------\n")
 
     input("Press [Enter] to go back to the menu")
-    menu_vmess()
 
 
 def menu_vmess():
