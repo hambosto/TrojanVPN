@@ -243,7 +243,7 @@ def menu_vmess():
     print("---------------------------------------------------\n")
 
     menu_selection = IntPrompt.ask(
-        "Select Menu", choices=[str(index) for index in range(5)], show_choices=False
+        "Select Menu", choices=[str(index) for index in range(4)], show_choices=False
     )
 
     if menu_selection == 1:
