@@ -46,7 +46,10 @@ install_acme_and_ssl() {
 
     echo "Issuing SSL certificate using acme.sh..."
     "$acme_sh_dir/acme.sh" --issue -d "$domain" --standalone -k ec-256
-    "$acme_sh_dir/acme.sh" --installcert -d "$domain" --fullchainpath "$xray_config_dir/xray.crt" --keypath "$xray_config_dir/xray.key" --ecc
+    "$acme_sh_dir/acme.sh" --installcert -d "$domain" --fullchainpath "$xray_config_dir/fullchain.crt" --keypath "$xray_config_dir/private.key" --ecc
+
+    chown -R nobody:nogroup "$xray_config_dir/fullchain.crt"
+    chown -R nobody:nogroup "$xray_config_dir/private.key"
 }
 
 # Function to generate and set a UUID for XRAY configuration files
