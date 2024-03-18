@@ -27,7 +27,10 @@ update_and_upgrade() {
     apt dist-upgrade -y
 
     # Install necessary packages
-    apt install netfilter-persistent apt-transport-https cmake build-essential cron bzip2 gzip coreutils uuid-runtime -y
+    apt install python3-pip netfilter-persistent apt-transport-https cmake build-essential cron bzip2 gzip coreutils uuid-runtime -y
+
+    # Install necessary python packages
+    pip3 install rich tabulate
 
     # Set timezone
     ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
