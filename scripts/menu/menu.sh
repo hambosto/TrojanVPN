@@ -64,7 +64,7 @@ _exists() {
 
 display_banner() {
     clear
-    curl -sS https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/logo
+    curl -sS https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/logo.txt
 }
 
 service_status() {
