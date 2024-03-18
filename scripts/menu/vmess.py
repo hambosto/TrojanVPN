@@ -2,13 +2,14 @@ import json
 import subprocess
 import os
 import base64
+from tabulate import tabulate
 from datetime import datetime, timedelta
 from rich.prompt import IntPrompt, Prompt
 import requests
 
 # Constants
-USERS_FILE = "users.db"
-XRAY_CONFIG = "config.json"
+USERS_FILE = "/usr/local/etc/xray/users.db"
+XRAY_CONFIG = "/usr/local/etc/xray/config.json"
 
 
 # Functions
@@ -70,7 +71,7 @@ def renew_vmess():
     new_exp_date = (client_exp + timedelta(days=expiration_days)).strftime("%Y-%m-%d")
 
     users_data["vmess"][client_number - 1]["expiry"] = new_exp_date
-    save_json_file(users_data)
+    save_json_file(users_data, USERS_FILE)
 
     print("---------------------------------------------------")
     print("Client Name :", selected_user["user"])
