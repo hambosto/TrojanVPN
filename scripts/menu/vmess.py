@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 import subprocess
 import os
@@ -11,7 +12,6 @@ import requests
 USERS_FILE = "/usr/local/etc/xray/users.db"
 XRAY_CONFIG = "/usr/local/etc/xray/config.json"
 
-
 # Functions
 def display_banner():
     url = "https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/logo.txt"
@@ -21,21 +21,17 @@ def display_banner():
     else:
         print("Failed to retrieve banner")
 
-
 def load_json_file(file_path):
     with open(file_path, "r") as file:
         return json.load(file)
-
 
 def save_json_file(data, file_path):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
 
-
 def restart_xray_service():
     os.system("systemctl restart xray.service")
     os.system("service cron restart")
-
 
 def display_vmess_clients(vmess_clients):
     table_data = [
@@ -126,7 +122,6 @@ def delete_vmess():
     print("---------------------------------------------------")
 
     input("Press any key to go back to the menu")
-
 
 def create_vmess():
     display_banner()
