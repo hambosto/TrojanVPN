@@ -3,6 +3,7 @@ import json
 import subprocess
 import os
 import base64
+import yaml
 from tabulate import tabulate
 from datetime import datetime, timedelta
 from rich.prompt import IntPrompt, Prompt
@@ -11,6 +12,7 @@ import requests
 # Constants
 USERS_FILE = "/usr/local/etc/xray/users.db"
 XRAY_CONFIG = "/usr/local/etc/xray/config.json"
+
 
 # Functions
 def display_banner():
@@ -22,17 +24,21 @@ def display_banner():
     else:
         print("Failed to retrieve banner")
 
+
 def load_json_file(file_path):
     with open(file_path, "r") as file:
         return json.load(file)
+
 
 def save_json_file(data, file_path):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
 
+
 def restart_xray_service():
     os.system("systemctl restart xray.service")
     os.system("service cron restart")
+
 
 def display_vmess_clients(vmess_clients):
     table_data = [
@@ -126,6 +132,7 @@ def delete_vmess():
     input("Press any key to go back to the menu")
     menu_vmess()
 
+
 def create_vmess():
     display_banner()
     domain = open("/usr/local/etc/xray/domain").read().strip()
@@ -210,9 +217,66 @@ def create_vmess():
         "tls": "tls",
     }
 
+    vmess_tls_clash = [
+        {
+            "name": username,
+            "type": "vmess",
+            "server": domain,
+            "port": 443,
+            "uuid": uuid,
+            "alterId": 0,
+            "cipher": "auto",
+            "udp": True,
+            "tls": True,
+            "skip-cert-verify": True,
+            "servername": domain,
+            "network": "ws",
+            "ws-opts": {"path": "/vmess", "headers": {"Host": domain}},
+        }
+    ]
+
+    vmess_none_tls_clash = [
+        {
+            "name": username,
+            "type": "vmess",
+            "server": domain,
+            "port": 80,
+            "uuid": uuid,
+            "alterId": 0,
+            "cipher": "auto",
+            "udp": True,
+            "tls": False,
+            "skip-cert-verify": False,
+            "servername": domain,
+            "network": "ws",
+            "ws-opts": {"path": "/vmess", "headers": {"Host": domain}},
+        }
+    ]
+
+    vmess_grpc_clash = [
+        {
+            "name": username,
+            "server": domain,
+            "port": 443,
+            "type": "vmess",
+            "uuid": uuid,
+            "alterId": 0,
+            "cipher": "auto",
+            "network": "grpc",
+            "tls": True,
+            "servername": domain,
+            "skip-cert-verify": True,
+            "grpc-opts": {"grpc-service-name": "vmess-grpc"},
+        }
+    ]
+
     encoded_tls = f"vmess://{base64.b64encode(json.dumps(vmess_tls).encode()).decode()}"
-    encoded_non_tls = f"vmess://{base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()}"
-    encoded_grpc = f"vmess://{base64.b64encode(json.dumps(vmess_grpc).encode()).decode()}"
+    encoded_non_tls = (f"vmess://{base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()}")
+    encoded_grpc = (f"vmess://{base64.b64encode(json.dumps(vmess_grpc).encode()).decode()}")
+
+    formatted_tls = yaml.dump(vmess_tls_clash, default_flow_style=False, sort_keys=False)
+    formatted_none_tls = yaml.dump(vmess_none_tls_clash, default_flow_style=False, sort_keys=False)
+    formatted_grpc = yaml.dump(vmess_grpc_clash, default_flow_style=False, sort_keys=False)
 
     print("---------------------------------------------------")
     print("Remarks           :", username)
@@ -235,6 +299,20 @@ def create_vmess():
     print("VMESS NONE TLS    :", encoded_non_tls)
     print("---------------------------------------------------")
     print("VMESS GRPC        :", encoded_grpc)
+    print("---------------------------------------------------")
+    print("                  Format Clash                     ")
+    print("---------------------------------------------------")
+    print("VMESS TLS:")
+    print("---------------------------------------------------")
+    print(formatted_tls)
+    print("---------------------------------------------------")
+    print("VMESS NONE TLS:")
+    print("---------------------------------------------------")
+    print(formatted_none_tls)
+    print("---------------------------------------------------")
+    print("VMESS gRPC:")
+    print("---------------------------------------------------")
+    print(formatted_grpc)
     print("---------------------------------------------------\n")
 
     input("Press [Enter] to go back to the menu")
