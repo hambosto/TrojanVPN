@@ -30,7 +30,7 @@ update_and_upgrade() {
     apt install python3-pip netfilter-persistent apt-transport-https cmake build-essential cron bzip2 gzip coreutils uuid-runtime -y
 
     # Install necessary python packages
-    pip3 install rich tabulate
+    pip3 install rich tabulate PyYAML
 
     # Set timezone
     ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
