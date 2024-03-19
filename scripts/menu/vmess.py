@@ -140,7 +140,7 @@ def create_vmess():
 
         if existing_user:
             print("Error: User already exists.")
-            input("Press Enter to continue...\n")
+            input("Press Enter to continue...")
         else:
             break
 
@@ -221,14 +221,19 @@ def create_vmess():
     print("Domain            :", domain)
     print("Port TLS          : 443")
     print("Port None TLS     : 80")
+    print("Port gRPC         : 443")
     print("UUID              :", uuid)
+    print("AlterId           : 0")
     print("Security          : Auto")
-    print("Network           : WS")
-    print("Path TLS          : /vmess")
-    print("Path None TLS     : /vmess")
+    print("Network           : Websocket, gRPC")
+    print("Path              : /vmess")
+    print("ServiceName       : vmess-grpc")
+    print("Apln              : h2, http/1.1")
     print("---------------------------------------------------")
     print("VMESS TLS         :", encoded_tls)
+    print("---------------------------------------------------")
     print("VMESS NONE TLS    :", encoded_non_tls)
+    print("---------------------------------------------------")
     print("VMESS GRPC        :", encoded_grpc)
     print("---------------------------------------------------\n")
 
