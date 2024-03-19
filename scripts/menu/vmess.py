@@ -52,6 +52,7 @@ def renew_vmess():
     if not vmess_clients:
         print("No existing VMESS clients found.")
         input("Press [Enter] to go back to the menu")
+        menu_vmess()
         return
 
     display_vmess_clients(vmess_clients)
@@ -77,6 +78,7 @@ def renew_vmess():
     print("---------------------------------------------------")
 
     input("Press [Enter] to go back to the menu")
+    menu_vmess()
 
 
 def delete_vmess():
@@ -113,7 +115,6 @@ def delete_vmess():
             ]
 
     save_json_file(config_data, XRAY_CONFIG)
-
     restart_xray_service()
 
     print("---------------------------------------------------")
@@ -123,6 +124,7 @@ def delete_vmess():
     print("---------------------------------------------------")
 
     input("Press any key to go back to the menu")
+    menu_vmess()
 
 def create_vmess():
     display_banner()
@@ -231,6 +233,7 @@ def create_vmess():
     print("---------------------------------------------------\n")
 
     input("Press [Enter] to go back to the menu")
+    menu_vmess()
 
 
 def menu_vmess():
