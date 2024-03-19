@@ -271,8 +271,8 @@ def create_vmess():
     ]
 
     encoded_tls = f"vmess://{base64.b64encode(json.dumps(vmess_tls).encode()).decode()}"
-    encoded_non_tls = (f"vmess://{base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()}")
-    encoded_grpc = (f"vmess://{base64.b64encode(json.dumps(vmess_grpc).encode()).decode()}")
+    encoded_non_tls = f"vmess://{base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()}"
+    encoded_grpc = f"vmess://{base64.b64encode(json.dumps(vmess_grpc).encode()).decode()}"
 
     formatted_tls = yaml.dump(vmess_tls_clash, default_flow_style=False, sort_keys=False)
     formatted_none_tls = yaml.dump(vmess_none_tls_clash, default_flow_style=False, sort_keys=False)
@@ -302,15 +302,15 @@ def create_vmess():
     print("---------------------------------------------------")
     print("                  Format Clash                     ")
     print("---------------------------------------------------")
-    print("VMESS TLS:")
+    print("                   VMESS TLS                       ")
     print("---------------------------------------------------")
     print(formatted_tls)
     print("---------------------------------------------------")
-    print("VMESS NONE TLS:")
+    print("                 VMESS NONE TLS                    ")
     print("---------------------------------------------------")
     print(formatted_none_tls)
     print("---------------------------------------------------")
-    print("VMESS gRPC:")
+    print("                   VMESS gRPC                      ")
     print("---------------------------------------------------")
     print(formatted_grpc)
     print("---------------------------------------------------\n")
