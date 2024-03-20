@@ -274,9 +274,9 @@ def create_vmess():
     encoded_non_tls = f"vmess://{base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()}"
     encoded_grpc = f"vmess://{base64.b64encode(json.dumps(vmess_grpc).encode()).decode()}"
 
-    formatted_tls = yaml.dump(vmess_tls_clash, default_flow_style=False, sort_keys=False)
-    formatted_none_tls = yaml.dump(vmess_none_tls_clash, default_flow_style=False, sort_keys=False)
-    formatted_grpc = yaml.dump(vmess_grpc_clash, default_flow_style=False, sort_keys=False)
+    formatted_tls = yaml.dump(vmess_tls_clash, sort_keys=False)
+    formatted_none_tls = yaml.dump(vmess_none_tls_clash, sort_keys=False)
+    formatted_grpc = yaml.dump(vmess_grpc_clash, sort_keys=False)
 
     print("---------------------------------------------------")
     print("Remarks           :", username)
