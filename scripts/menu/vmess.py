@@ -270,50 +270,86 @@ def create_vmess():
         }
     ]
 
-    encoded_tls = f"vmess://{base64.b64encode(json.dumps(vmess_tls).encode()).decode()}"
-    encoded_non_tls = f"vmess://{base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()}"
-    encoded_grpc = f"vmess://{base64.b64encode(json.dumps(vmess_grpc).encode()).decode()}"
+    encoded_tls = base64.b64encode(json.dumps(vmess_tls).encode()).decode()
+    encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
+    encoded_grpc = base64.b64encode(json.dumps(vmess_grpc).encode()).decode()
 
     formatted_tls = yaml.dump(vmess_tls_clash, sort_keys=False)
     formatted_none_tls = yaml.dump(vmess_none_tls_clash, sort_keys=False)
     formatted_grpc = yaml.dump(vmess_grpc_clash, sort_keys=False)
 
-    print("---------------------------------------------------")
-    print("Remarks           :", username)
-    print("Created On        :", today)
-    print("Expired On        :", expiration_date)
-    print("Domain            :", domain)
-    print("Port TLS          : 443")
-    print("Port None TLS     : 80")
-    print("Port gRPC         : 443")
-    print("UUID              :", uuid)
-    print("AlterId           : 0")
-    print("Security          : Auto")
-    print("Network           : Websocket, gRPC")
-    print("Path              : /vmess")
-    print("ServiceName       : vmess-grpc")
-    print("Apln              : h2, http/1.1")
-    print("---------------------------------------------------")
-    print("VMESS TLS         :", encoded_tls)
-    print("---------------------------------------------------")
-    print("VMESS NONE TLS    :", encoded_non_tls)
-    print("---------------------------------------------------")
-    print("VMESS GRPC        :", encoded_grpc)
-    print("---------------------------------------------------")
-    print("                  Format Clash                     ")
-    print("---------------------------------------------------")
-    print("                   VMESS TLS                       ")
-    print("---------------------------------------------------")
-    print(formatted_tls)
-    print("---------------------------------------------------")
-    print("                 VMESS NONE TLS                    ")
-    print("---------------------------------------------------")
-    print(formatted_none_tls)
-    print("---------------------------------------------------")
-    print("                   VMESS gRPC                      ")
-    print("---------------------------------------------------")
-    print(formatted_grpc)
-    print("---------------------------------------------------\n")
+    vpn_configuration = [
+        ["Remarks", username],
+        ["Created On", today],
+        ["Expired On", expiration_date],
+        ["Domain", domain],
+        ["Port TLS", 443],
+        ["Port None TLS", 80],
+        ["Port gRPC", 443],
+        ["UUID", uuid],
+        ["AlterId", 0],
+        ["Security", "Auto"],
+        ["Network", "Websocket, gRPC"],
+        ["Path", "/vmess"],
+        ["ServiceName", "vmess-grpc"],
+        ["Apln", "h2, http/1.1"],
+    ]
+
+    encoded_configs = [
+        ["VMESS TLS:", f"vmess://{encoded_tls}"],
+        ["VMESS NONE TLS:", f"vmess://{encoded_non_tls}"],
+        ["VMESS GRPC:", f"vmess://{encoded_grpc}"],
+    ]
+
+    formatted_configs = [
+        ["VMESS TLS:", formatted_tls],
+        ["VMESS NONE TLS:", formatted_none_tls],
+        ["VMESS gRPC:", formatted_grpc],
+    ]
+
+    print(tabulate(vpn_configuration, tablefmt="grid"))
+    print("\n")
+    print(tabulate(encoded_configs, tablefmt="plain"))
+    print("\n")
+    print(tabulate(formatted_configs, tablefmt="plain"))
+    print("\n")
+
+    # print("---------------------------------------------------")
+    # print("Remarks           :", username)
+    # print("Created On        :", today)
+    # print("Expired On        :", expiration_date)
+    # print("Domain            :", domain)
+    # print("Port TLS          : 443")
+    # print("Port None TLS     : 80")
+    # print("Port gRPC         : 443")
+    # print("UUID              :", uuid)
+    # print("AlterId           : 0")
+    # print("Security          : Auto")
+    # print("Network           : Websocket, gRPC")
+    # print("Path              : /vmess")
+    # print("ServiceName       : vmess-grpc")
+    # print("Apln              : h2, http/1.1")
+    # print("---------------------------------------------------")
+    # print("VMESS TLS         :", encoded_tls)
+    # print("---------------------------------------------------")
+    # print("VMESS NONE TLS    :", encoded_non_tls)
+    # print("---------------------------------------------------")
+    # print("VMESS GRPC        :", encoded_grpc)
+    # print("---------------------------------------------------")
+    # print("                  Format Clash                     ")
+    # print("---------------------------------------------------")
+    # print("                   VMESS TLS                       ")
+    # print("---------------------------------------------------")
+    # print(formatted_tls)
+    # print("---------------------------------------------------")
+    # print("                 VMESS NONE TLS                    ")
+    # print("---------------------------------------------------")
+    # print(formatted_none_tls)
+    # print("---------------------------------------------------")
+    # print("                   VMESS gRPC                      ")
+    # print("---------------------------------------------------")
+    # print(formatted_grpc)
+    # print("---------------------------------------------------\n")
 
     input("Press [Enter] to go back to the menu")
     menu_vmess()
