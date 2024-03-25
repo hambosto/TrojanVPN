@@ -217,9 +217,9 @@ def create_vmess():
         "tls": "tls",
     }
 
-    vmess_tls_clash = [
+    format_clash = [
         {
-            "name": username,
+            "name": f"XRAY_VMESS_TLS_{username}",
             "type": "vmess",
             "server": domain,
             "port": 443,
@@ -231,13 +231,10 @@ def create_vmess():
             "skip-cert-verify": True,
             "servername": domain,
             "network": "ws",
-            "ws-opts": {"path": "/vmess", "headers": {"Host": domain}},
-        }
-    ]
-
-    vmess_none_tls_clash = [
+            "ws-opts": {"path": "/vmess", "headers": {"host": domain}},
+        },
         {
-            "name": username,
+            "name": f"XRAY_VMESS_NONE_TLS_{username}",
             "type": "vmess",
             "server": domain,
             "port": 80,
@@ -249,13 +246,10 @@ def create_vmess():
             "skip-cert-verify": False,
             "servername": domain,
             "network": "ws",
-            "ws-opts": {"path": "/vmess", "headers": {"Host": domain}},
-        }
-    ]
-
-    vmess_grpc_clash = [
+            "ws-opts": {"path": "/vmess", "headers": {"host": domain}},
+        },
         {
-            "name": username,
+            "name": f"XRAY_VMESS_GRPC_{username}",
             "server": domain,
             "port": 443,
             "type": "vmess",
@@ -267,16 +261,14 @@ def create_vmess():
             "servername": domain,
             "skip-cert-verify": True,
             "grpc-opts": {"grpc-service-name": "vmess-grpc"},
-        }
+        },
     ]
 
     encoded_tls = base64.b64encode(json.dumps(vmess_tls).encode()).decode()
     encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
     encoded_grpc = base64.b64encode(json.dumps(vmess_grpc).encode()).decode()
 
-    formatted_tls = yaml.dump(vmess_tls_clash, sort_keys=False)
-    formatted_none_tls = yaml.dump(vmess_none_tls_clash, sort_keys=False)
-    formatted_grpc = yaml.dump(vmess_grpc_clash, sort_keys=False)
+    formatted_clash = yaml.dump({"proxies": format_clash}, sort_keys=False)
 
     vpn_configuration = [
         ["Remarks", username],
@@ -295,23 +287,21 @@ def create_vmess():
         ["Apln", "h2, http/1.1"],
     ]
 
-    encoded_configs = [
-        ["VMESS TLS:", f"vmess://{encoded_tls}"],
-        ["VMESS NONE TLS:", f"vmess://{encoded_non_tls}"],
-        ["VMESS GRPC:", f"vmess://{encoded_grpc}"],
-    ]
-
-    formatted_configs = [
-        ["VMESS TLS:", formatted_tls],
-        ["VMESS NONE TLS:", formatted_none_tls],
-        ["VMESS gRPC:", formatted_grpc],
-    ]
-
     print(tabulate(vpn_configuration, tablefmt="grid"))
+
     print("\n")
-    print(tabulate(encoded_configs, tablefmt="plain"))
+    print("---------------------------------------------------")
+    print(f"VMESS TLS      : vmess://{encoded_tls}")
+    print("---------------------------------------------------")
+    print(f"VMESS NONE TLS : vmess://{encoded_non_tls}")
+    print("---------------------------------------------------")
+    print(f"VMESS GRPC     : vmess://{encoded_grpc}")
+    print("---------------------------------------------------")
     print("\n")
-    print(tabulate(formatted_configs, tablefmt="plain"))
+
+    print("---------------------------------------------------")
+    print(formatted_clash)
+    print("---------------------------------------------------")
     print("\n")
 
     input("Press [Enter] to go back to the menu")
