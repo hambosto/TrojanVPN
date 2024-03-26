@@ -237,6 +237,9 @@ def create_vmess():
     encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
     formatted_clash = yaml.dump({"proxies": format_clash}, sort_keys=False)
 
+    with open(f"/var/www/html/vmess/vmess-{username}.txt", "w") as f:
+        f.write(formatted_clash)
+    
     vpn_configuration = [
         ["Remarks", username],
         ["Created On", today],
@@ -259,6 +262,8 @@ def create_vmess():
     print(f"VMESS TLS      : vmess://{encoded_tls}")
     print("---------------------------------------------------")
     print(f"VMESS NONE TLS : vmess://{encoded_non_tls}")
+    print("---------------------------------------------------")
+    print(f"Format Clash   : https://{domain}/vmess/vmess-{username}.txt")
     print("---------------------------------------------------")
     print("\n")
 
