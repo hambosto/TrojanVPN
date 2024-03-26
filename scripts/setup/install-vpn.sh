@@ -47,14 +47,11 @@ install_nginx() {
     rm -rf /var/www/html/*
     rm /etc/nginx/sites-enabled/default
     rm /etc/nginx/sites-available/default
-    
-    echo "Creating directory for VMess configuration..."
-    mkdir -p /var/www/html/vmess
 
     echo "Downloading Nginx configuration files..."
     download_file "https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/nginx.conf" "/etc/nginx/nginx.conf"
+    sed -i "s/\$domain/$domain/g" "/etc/nginx/nginx.conf"
 
-    # Step 5: Restart Nginx
     echo "Restarting Nginx..."
     restart_service "nginx"
 
@@ -163,6 +160,8 @@ restart_services() {
     restart_service "resolvconf"
     restart_service "vnstat"
 }
+
+domain=$(cat /root/domain)
 
 # Main execution starts here
 update_and_upgrade
