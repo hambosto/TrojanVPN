@@ -200,7 +200,7 @@ def create_vmess():
 
     format_clash = [
         {
-            "name": f"XRAY_VMESS_TLS_{username}",
+            "name": f"VMESS_HTTPS_{username}",
             "type": "vmess",
             "server": domain,
             "port": 443,
@@ -215,7 +215,7 @@ def create_vmess():
             "ws-opts": {"path": "/vmess", "headers": {"host": domain}},
         },
         {
-            "name": f"XRAY_VMESS_NONE_TLS_{username}",
+            "name": f"VMESS_HTTP_{username}",
             "type": "vmess",
             "server": domain,
             "port": 80,
@@ -240,8 +240,8 @@ def create_vmess():
         ["Created On", today],
         ["Expired On", expiration_date],
         ["Domain", domain],
-        ["Port TLS", 443],
-        ["Port None TLS", 80],
+        ["Port HTTPS", 443],
+        ["Port HTTP", 80],
         ["UUID", uuid],
         ["AlterId", 0],
         ["Security", "Auto"],
@@ -254,9 +254,9 @@ def create_vmess():
 
     print("\n")
     print("---------------------------------------------------")
-    print(f"VMESS TLS      : vmess://{encoded_tls}")
+    print(f"VMESS HTTPS : vmess://{encoded_tls}")
     print("---------------------------------------------------")
-    print(f"VMESS NONE TLS : vmess://{encoded_non_tls}")
+    print(f"VMESS HTTP  : vmess://{encoded_non_tls}")
     print("---------------------------------------------------")
     print(formatted_clash)
     print("---------------------------------------------------")
