@@ -70,9 +70,10 @@ generate_and_set_uuid() {
     echo $(jq --arg uuid "$uuid" '.inbounds[3].settings.clients[0].id = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
     echo $(jq --arg uuid "$uuid" '.inbounds[4].settings.clients[0].password = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
     echo $(jq --arg uuid "$uuid" '.inbounds[5].settings.clients[0].id = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
-    echo $(jq --arg uuid "$uuid" '.inbounds[6].settings.clients[0].id = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
-    echo $(jq --arg uuid "$uuid" '.inbounds[7].settings.clients[0].password = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
-    echo $(jq --arg uuid "$uuid" '.inbounds[8].settings.clients[0].id = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
+
+    # echo $(jq --arg uuid "$uuid" '.inbounds[6].settings.clients[0].id = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
+    # echo $(jq --arg uuid "$uuid" '.inbounds[7].settings.clients[0].password = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
+    # echo $(jq --arg uuid "$uuid" '.inbounds[8].settings.clients[0].id = $uuid' "$xray_config_dir/config.json") > "$xray_config_dir/config.json"
 
     echo "Creating users database for XRAY..."
     jq -n '{"vmess": [], "vless": [], "trojan": []}' > "$xray_config_dir/users.db"
