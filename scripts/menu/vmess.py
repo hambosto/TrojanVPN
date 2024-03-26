@@ -10,8 +10,12 @@ from rich.prompt import IntPrompt, Prompt
 import requests
 
 # Constants
-USERS_FILE = "/usr/local/etc/xray/users.db"
-XRAY_CONFIG = "/usr/local/etc/xray/config.json"
+USERS_FILE        = "/usr/local/etc/xray/users.db"
+XRAY_CONFIG       = "/usr/local/etc/xray/config.json"
+CLASH_CONFIG_PATH = "/var/www/html/vmess"
+
+if not os.path.exists(CLASH_CONFIG_PATH):
+    os.makedirs(CLASH_CONFIG_PATH)
 
 
 # Functions
@@ -237,7 +241,7 @@ def create_vmess():
     encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
     formatted_clash = yaml.dump({"proxies": format_clash}, sort_keys=False)
 
-    with open(f"/var/www/html/vmess/vmess-{username}.txt", "w") as f:
+    with open(f"{CLASH_CONFIG_PATH}/vmess-{username}.txt", "w") as f:
         f.write(formatted_clash)
     
     vpn_configuration = [
@@ -266,11 +270,6 @@ def create_vmess():
     print(f"Format Clash   : https://{domain}/vmess/vmess-{username}.txt")
     print("---------------------------------------------------")
     print("\n")
-
-    # print("---------------------------------------------------")
-    # print(formatted_clash)
-    # print("---------------------------------------------------")
-    # print("\n")
 
     input("Press [Enter] to go back to the menu")
     menu_vmess()
