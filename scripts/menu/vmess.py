@@ -12,7 +12,6 @@ import requests
 # Constants
 USERS_FILE        = "/usr/local/etc/xray/users.db"
 XRAY_CONFIG       = "/usr/local/etc/xray/config.json"
-CLASH_CONFIG_PATH = "/var/www/html/vmess"
 
 # Functions
 def display_banner():
@@ -236,9 +235,6 @@ def create_vmess():
     encoded_tls = base64.b64encode(json.dumps(vmess_tls).encode()).decode()
     encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
     formatted_clash = yaml.dump({"proxies": format_clash}, sort_keys=False)
-
-    with open(f"{CLASH_CONFIG_PATH}/vmess-{username}.txt", "w") as f:
-        f.write(formatted_clash)
     
     vpn_configuration = [
         ["Remarks", username],
@@ -263,7 +259,7 @@ def create_vmess():
     print("---------------------------------------------------")
     print(f"VMESS NONE TLS : vmess://{encoded_non_tls}")
     print("---------------------------------------------------")
-    print(f"Format Clash   : https://{domain}/vmess/vmess-{username}.txt")
+    print(f"Format Clash   : \n{formatted_clash}")
     print("---------------------------------------------------")
     print("\n")
 
