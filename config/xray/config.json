@@ -148,7 +148,7 @@
                 "clients": [
                     {
                         "email": "general@vmess-ws",
-                        "id": "73f7a0ec-284d-4c08-98e2-0e66a8a8137d",
+                        "id": "",
                         "level": 0
                     }
                 ]
@@ -186,86 +186,6 @@
                 "wsSettings": {
                     "acceptProxyProtocol": true,
                     "path": "/trojan"
-                }
-            },
-            "sniffing": {
-                "enabled": true,
-                "destOverride": [
-                    "http",
-                    "tls"
-                ]
-            }
-        },
-        {
-            "listen": "127.0.0.1",
-            "port": 11000,
-            "protocol": "vless",
-            "settings": {
-                "clients": [
-                    {
-                        "email": "general@vless-grpc",
-                        "id": ""
-                    }
-                ],
-                "decryption": "none"
-            },
-            "streamSettings": {
-                "network": "grpc",
-                "grpcSettings": {
-                    "serviceName": "vless-grpc"
-                }
-            },
-            "sniffing": {
-                "enabled": true,
-                "destOverride": [
-                    "http",
-                    "tls"
-                ]
-            }
-        },
-        {
-            "listen": "127.0.0.1",
-            "port": 12000,
-            "protocol": "vmess",
-            "settings": {
-                "clients": [
-                    {
-                        "email": "general@vmess-grpc",
-                        "id": "",
-                        "level": 0
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "grpc",
-                "grpcSettings": {
-                    "serviceName": "vmess-grpc"
-                }
-            },
-            "sniffing": {
-                "enabled": true,
-                "destOverride": [
-                    "http",
-                    "tls"
-                ]
-            }
-        },
-        {
-            "listen": "127.0.0.1",
-            "port": 13000,
-            "protocol": "trojan",
-            "settings": {
-                "clients": [
-                    {
-                        "password": "",
-                        "level": 0
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "grpc",
-                "grpcSettings": {
-                    "serviceName": "trojan-grpc"
                 }
             },
             "sniffing": {
