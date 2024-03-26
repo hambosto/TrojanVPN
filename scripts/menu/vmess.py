@@ -259,7 +259,7 @@ def create_vmess():
     print("---------------------------------------------------")
     print(f"VMESS NONE TLS : vmess://{encoded_non_tls}")
     print("---------------------------------------------------")
-    print(f"Format Clash   : \n{formatted_clash}")
+    print(formatted_clash)
     print("---------------------------------------------------")
     print("\n")
 
