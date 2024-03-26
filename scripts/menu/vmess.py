@@ -147,7 +147,6 @@ def create_vmess():
 
         if existing_user:
             print("Error: User already exists.")
-            input("Press Enter to continue...")
         else:
             break
 
@@ -155,9 +154,7 @@ def create_vmess():
     expiration_days = int(expiration_days) if expiration_days else 1
 
     uuid = subprocess.run(["uuidgen"], stdout=subprocess.PIPE, text=True).stdout.strip()
-    expiration_date = (datetime.now() + timedelta(days=expiration_days)).strftime(
-        "%Y-%m-%d"
-    )
+    expiration_date = (datetime.now() + timedelta(days=expiration_days)).strftime("%Y-%m-%d")
     today = datetime.now().strftime("%Y-%m-%d")
 
     new_user = {"user": username, "uuid": uuid, "expiry": expiration_date}
@@ -166,7 +163,7 @@ def create_vmess():
 
     config_data = load_json_file(XRAY_CONFIG)
 
-    for index in [3, 6, 8]:
+    for index in [3, 5]:
         config_data["inbounds"][index]["settings"]["clients"].append(
             {"id": uuid, "alterId": 0, "email": username}
         )
@@ -203,20 +200,6 @@ def create_vmess():
         "tls": "none",
     }
 
-    vmess_grpc = {
-        "v": "2",
-        "ps": username,
-        "add": domain,
-        "port": "443",
-        "id": uuid,
-        "aid": "0",
-        "net": "grpc",
-        "path": "vmess-grpc",
-        "type": "none",
-        "host": domain,
-        "tls": "tls",
-    }
-
     format_clash = [
         {
             "name": f"XRAY_VMESS_TLS_{username}",
@@ -247,27 +230,11 @@ def create_vmess():
             "servername": domain,
             "network": "ws",
             "ws-opts": {"path": "/vmess", "headers": {"host": domain}},
-        },
-        {
-            "name": f"XRAY_VMESS_GRPC_{username}",
-            "server": domain,
-            "port": 443,
-            "type": "vmess",
-            "uuid": uuid,
-            "alterId": 0,
-            "cipher": "auto",
-            "network": "grpc",
-            "tls": True,
-            "servername": domain,
-            "skip-cert-verify": True,
-            "grpc-opts": {"grpc-service-name": "vmess-grpc"},
-        },
+        }
     ]
 
     encoded_tls = base64.b64encode(json.dumps(vmess_tls).encode()).decode()
     encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
-    encoded_grpc = base64.b64encode(json.dumps(vmess_grpc).encode()).decode()
-
     formatted_clash = yaml.dump({"proxies": format_clash}, sort_keys=False)
 
     vpn_configuration = [
@@ -277,13 +244,11 @@ def create_vmess():
         ["Domain", domain],
         ["Port TLS", 443],
         ["Port None TLS", 80],
-        ["Port gRPC", 443],
         ["UUID", uuid],
         ["AlterId", 0],
         ["Security", "Auto"],
-        ["Network", "Websocket, gRPC"],
+        ["Network", "Websocket"],
         ["Path", "/vmess"],
-        ["ServiceName", "vmess-grpc"],
         ["Apln", "h2, http/1.1"],
     ]
 
@@ -294,8 +259,6 @@ def create_vmess():
     print(f"VMESS TLS      : vmess://{encoded_tls}")
     print("---------------------------------------------------")
     print(f"VMESS NONE TLS : vmess://{encoded_non_tls}")
-    print("---------------------------------------------------")
-    print(f"VMESS GRPC     : vmess://{encoded_grpc}")
     print("---------------------------------------------------")
     print("\n")
 
