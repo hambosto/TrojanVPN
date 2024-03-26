@@ -14,10 +14,6 @@ USERS_FILE        = "/usr/local/etc/xray/users.db"
 XRAY_CONFIG       = "/usr/local/etc/xray/config.json"
 CLASH_CONFIG_PATH = "/var/www/html/vmess"
 
-if not os.path.exists(CLASH_CONFIG_PATH):
-    os.makedirs(CLASH_CONFIG_PATH)
-
-
 # Functions
 def display_banner():
     os.system("clear")
