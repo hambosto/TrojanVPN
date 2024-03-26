@@ -38,22 +38,29 @@ update_and_upgrade() {
 
 # Function to install Nginx
 install_nginx() {
+    echo "Starting Nginx installation and configuration..."
+
     echo "Installing Nginx..."
     apt install nginx -y
 
-    echo "Removing default Nginx configuration files..."
+    echo "Cleaning up default Nginx configuration..."
+    rm -rf /var/www/html/*
     rm /etc/nginx/sites-enabled/default
     rm /etc/nginx/sites-available/default
+    
+    echo "Creating directory for VMess configuration..."
+    mkdir -p /var/www/html/vmess
 
-    echo "Downloading Nginx configuration files from GitHub..."
+    echo "Downloading Nginx configuration files..."
     download_file "https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/nginx.conf" "/etc/nginx/nginx.conf"
-    download_file "https://raw.githubusercontent.com/hambosto/TrojanVPN/main/config/grpc.conf" "/etc/nginx/conf.d/grpc.conf"
 
+    # Step 5: Restart Nginx
     echo "Restarting Nginx..."
     restart_service "nginx"
 
     echo "Nginx installation and configuration completed successfully."
 }
+
 
 # Function to install vnstat
 install_vnstat() {
