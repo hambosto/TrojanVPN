@@ -10,8 +10,8 @@ from rich.prompt import IntPrompt, Prompt
 import requests
 
 # Constants
-USERS_FILE        = "/usr/local/etc/xray/users.db"
-XRAY_CONFIG       = "/usr/local/etc/xray/config.json"
+USERS_FILE  = "/usr/local/etc/xray/users.db"
+XRAY_CONFIG = "/usr/local/etc/xray/config.json"
 
 # Functions
 def display_banner():
@@ -145,7 +145,7 @@ def create_vmess():
         )
 
         if existing_user:
-            print("Error: User already exists.")
+            print("Error: Username already exists.")
         else:
             break
 
@@ -156,8 +156,7 @@ def create_vmess():
     expiration_date = (datetime.now() + timedelta(days=expiration_days)).strftime("%Y-%m-%d")
     today = datetime.now().strftime("%Y-%m-%d")
 
-    new_user = {"user": username, "uuid": uuid, "expiry": expiration_date}
-    vmess_users.append(new_user)
+    vmess_users.append({"user": username, "uuid": uuid, "expiry": expiration_date})
     save_json_file(existing_users, USERS_FILE)
 
     config_data = load_json_file(XRAY_CONFIG)
@@ -277,10 +276,8 @@ def menu_vmess():
     print("0. Go Back to Menu")
     print("---------------------------------------------------\n")
 
-    menu_selection = IntPrompt.ask(
-        "Select Menu", choices=[str(index) for index in range(4)], show_choices=False
-    )
-
+    menu_selection = IntPrompt.ask("Select Menu", choices=[str(index) for index in range(4)], show_choices=False)
+    
     if menu_selection == 1:
         create_vmess()
     elif menu_selection == 2:
