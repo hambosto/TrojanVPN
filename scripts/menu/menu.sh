@@ -392,8 +392,6 @@ elif _exists "uptime"; then
     load=$(LANG=C uptime | head -1 | awk -F'load average:' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//')
 fi
 
-
-
 date_today=$(date -R | cut -d " " -f -4)
 
 today_download="$(vnstat | grep today | awk 'NR==1{print $2" "substr($3, 1, 3)}')"
@@ -479,10 +477,10 @@ echo -e "XRAY          : $status_xray"
 echo -e "----------------------------------------------------"
 echo -e "                     Menu                           "
 echo -e "----------------------------------------------------"
-echo -e "1.  VMESS Websocket        4. Restart VPN Service   "
-echo -e "2.  VLESS Websocket        5. Change Domain         "
-echo -e "3.  Trojan Websocket       6. Renew Domain SSL      "
-echo -e "7.  Change DNS             8. Speedtest Network     "
+echo -e "1.  VMESS                 4. Restart VPN Service    "
+echo -e "2.  VLESS                 5. Change Domain          "
+echo -e "3.  Trojan                6. Renew Domain SSL       "
+echo -e "7.  Change DNS            8. Speedtest by Ookla     "
 echo -e "9.  Optimize Network      10. System Status         "
 echo -e "11. Users Online          12. Exit                  "
 echo -e "----------------------------------------------------"
