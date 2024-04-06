@@ -249,10 +249,16 @@ renew_ssl() {
 
     # Start renewing the certificate
     echo "Starting renew cert..."
-    /root/.acme.sh/acme.sh --upgrade --auto-upgrade
-    /root/.acme.sh/acme.sh --set-default-ca --server letsencrypt
-    /root/.acme.sh/acme.sh --issue -d $domain --standalone -k ec-256
-    ~/.acme.sh/acme.sh --installcert -d $domain --fullchainpath /usr/local/etc/xray/xray.crt --keypath /usr/local/etc/xray/xray.key --ecc
+    "$acme_sh_dir/acme.sh" --upgrade --auto-upgrade
+    "$acme_sh_dir/acme.sh" --set-default-ca --server letsencrypt
+
+    echo "Issuing SSL certificate using acme.sh..."
+    "$acme_sh_dir/acme.sh" --issue -d "$domain" --standalone -k ec-256
+    "$acme_sh_dir/acme.sh" --installcert -d "$domain" --fullchainpath "/usr/local/etc/xray/fullchain.crt" --keypath "/usr/local/etc/xray/private.key" --ecc
+
+    echo "Changing ownership of certificate files..."
+    chown -R nobody:nogroup "$xray_config_dir/fullchain.crt"
+    chown -R nobody:nogroup "$xray_config_dir/private.key"
 
     echo "Renew cert done..."
     sleep 2
