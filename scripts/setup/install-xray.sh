@@ -6,11 +6,10 @@ install_essentials() {
     apt update -y && apt upgrade -y
 
     echo "Installing essential packages..."
-    apt install socat jq ntpdate chrony zip unzip netcat -y
+    apt install socat jq ntpdate chrony zip unzip -y
 
     echo "Configuring and starting chrony..."
     timedatectl set-ntp true
-    systemctl enable --now chronyd
 
     echo "Setting the timezone to Asia/Jakarta..."
     timedatectl set-timezone Asia/Jakarta
