@@ -21,19 +21,22 @@ restart_service() {
 }
 
 # Function to update and upgrade the system
-update_and_upgrade() {
+install_dependency() {
+    echo "Installing necessary packages..."
     apt update -y
     apt upgrade -y
-    apt dist-upgrade -y
-
-    # Install necessary packages
-    apt install python3-pip netfilter-persistent apt-transport-https cmake build-essential cron bzip2 gzip coreutils uuid-runtime -y
-
-    # Install necessary python packages
-    pip3 install rich tabulate PyYAML
-
-    # Set timezone
-    ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+    apt install -y \
+        netfilter-persistent \
+        cmake \
+        cron \
+        uuid-runtime \
+        python3-psutil \
+        python3-pandas \
+        python3-tabulate \
+        python3-rich \
+        python3-distro \
+        python3-requests
+    echo "Dependency installation complete."
 }
 
 # Function to install Nginx
@@ -68,48 +71,14 @@ install_vnstat() {
     echo "vnstat installation complete."
 }
 
-# Function to install fail2ban and DOS-Deflate
-install_fail2ban_and_dos_deflate() {
-    apt install fail2ban -y
-
-    enable_and_start_service "fail2ban"
-
-    if [ -d '/usr/local/ddos' ]; then
-        echo "Please uninstall the previous version first"
-        exit 0
-    else
-        mkdir /usr/local/ddos
-    fi
-
-    echo "Installing DOS-Deflate..."
-
-    for file in ddos.conf LICENSE ignore.ip.list ddos.sh; do
-        download_file "http://www.inetbase.com/scripts/ddos/$file" "/usr/local/ddos/$file"
-    done
-
-    ln -s /usr/local/ddos/ddos.sh /usr/local/sbin/ddos
-
-    echo "Download complete."
-
-    echo "Creating a cron job to run the script every minute (Default setting)..."
-    /usr/local/ddos/ddos.sh --cron > /dev/null 2>&1
-    echo "Cron job created."
-}
-
 # Function to block Torrent and P2P Traffic
 block_torrent_and_p2p_traffic() {
     echo "Blocking torrent and P2P traffic strings..."
 
-    iptables -A FORWARD -m string --string "get_peers" --algo bm -j DROP
-    iptables -A FORWARD -m string --string "announce_peer" --algo bm -j DROP
-    iptables -A FORWARD -m string --string "find_node" --algo bm -j DROP
-    iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j DROP
-    iptables -A FORWARD -m string --algo bm --string "BitTorrent protocol" -j DROP
-    iptables -A FORWARD -m string --algo bm --string "peer_id=" -j DROP
-    iptables -A FORWARD -m string --algo bm --string ".torrent" -j DROP
-    iptables -A FORWARD -m string --algo bm --string "announce.php?passkey=" -j DROP
-    iptables -A FORWARD -m string --algo bm --string "torrent" -j DROP
-    iptables -A FORWARD -m string --algo bm --string "announce" -j DROP
+    sudo iptables -A INPUT -p udp --dport 6881:6889 -j DROP
+    sudo iptables -A INPUT -p tcp --dport 6881:6889 -j DROP
+    sudo iptables -A INPUT -p tcp --dport 6881:6889 -m string --algo bm --string "BitTorrent" -j DROP
+    sudo iptables -A INPUT -p udp --dport 6881:6889 -m string --algo bm --string "BitTorrent" -j DROP
 
     echo "Saving and applying iptables rules..."
     iptables-save > /etc/iptables.up.rules
@@ -164,10 +133,9 @@ restart_services() {
 domain=$(cat /root/domain)
 
 # Main execution starts here
-update_and_upgrade
+install_necessary
 install_nginx
 install_vnstat
-install_fail2ban_and_dos_deflate
 block_torrent_and_p2p_traffic
 configure_dns_resolution
 configure_cron_jobs

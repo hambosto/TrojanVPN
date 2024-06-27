@@ -2,11 +2,9 @@
 
 # Function to install essential packages and utilities
 install_essentials() {
-    echo "Updating and upgrading the system..."
-    apt update -y && apt upgrade -y
 
     echo "Installing essential packages..."
-    apt install socat jq ntpdate chrony zip unzip -y
+    apt install socat jq ntpdate chrony unzip -y
 
     echo "Configuring and starting chrony..."
     timedatectl set-ntp true

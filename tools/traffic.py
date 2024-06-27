@@ -54,7 +54,7 @@ def print_sum(data, prefix):
     df_sorted['value'] = df_sorted['value'].apply(human_readable_size)
 
     table = Table(title="Xray Statistics", box=box.SQUARE, show_header=True, header_style="bold cyan")
-    table.add_column("Pengguna / User", justify="center", style="cyan", no_wrap=True)
+    table.add_column("Username", justify="center", style="cyan", no_wrap=True)
     table.add_column("Data Traffic", justify="center", style="magenta", no_wrap=True)
 
     for index, row in df_sorted.iterrows():
@@ -63,9 +63,9 @@ def print_sum(data, prefix):
         table.add_row(entity, value)
 
     table.add_row("", "")
-    table.add_row("SUM->up:", human_readable_size(up_sum))
-    table.add_row("SUM->down:", human_readable_size(down_sum))
-    table.add_row("SUM->TOTAL:", human_readable_size(total_sum))
+    table.add_row("Upload:", human_readable_size(up_sum))
+    table.add_row("Download:", human_readable_size(down_sum))
+    table.add_row("Total:", human_readable_size(total_sum))
 
     console.print(table)
 

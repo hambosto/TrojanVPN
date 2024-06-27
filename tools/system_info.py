@@ -140,7 +140,7 @@ def get_system_info():
         ("Disk Usage", disk_usage_str),
         ("Uptime Server", uptime_str),
         ("Nginx Status", nginx_status),
-        ("Xray-core Status", xray_status)
+        ("Xray-Core Status", xray_status)
     ]
 
     network_data = [

@@ -3,10 +3,7 @@ import json
 import subprocess
 import os
 import base64
-import yaml
-from tabulate import tabulate
 from datetime import datetime, timedelta
-from rich.prompt import IntPrompt, Prompt
 import requests
 
 # Constants
@@ -198,67 +195,14 @@ def create_vmess():
         "tls": "none",
     }
 
-    format_clash = [
-        {
-            "name": f"VMESS_HTTPS_{username}",
-            "type": "vmess",
-            "server": domain,
-            "port": 443,
-            "uuid": uuid,
-            "alterId": 0,
-            "cipher": "auto",
-            "udp": True,
-            "tls": True,
-            "skip-cert-verify": True,
-            "servername": domain,
-            "network": "ws",
-            "ws-opts": {"path": "/vmess", "headers": {"host": domain}},
-        },
-        {
-            "name": f"VMESS_HTTP_{username}",
-            "type": "vmess",
-            "server": domain,
-            "port": 80,
-            "uuid": uuid,
-            "alterId": 0,
-            "cipher": "auto",
-            "udp": True,
-            "tls": False,
-            "skip-cert-verify": False,
-            "servername": domain,
-            "network": "ws",
-            "ws-opts": {"path": "/vmess", "headers": {"host": domain}},
-        }
-    ]
-
     encoded_tls = base64.b64encode(json.dumps(vmess_tls).encode()).decode()
     encoded_non_tls = base64.b64encode(json.dumps(vmess_none_tls).encode()).decode()
-    formatted_clash = yaml.dump({"proxies": format_clash}, sort_keys=False)
-    
-    vpn_configuration = [
-        ["Remarks", username],
-        ["Created On", today],
-        ["Expired On", expiration_date],
-        ["Domain", domain],
-        ["Port HTTPS", 443],
-        ["Port HTTP", 80],
-        ["UUID", uuid],
-        ["AlterId", 0],
-        ["Security", "Auto"],
-        ["Network", "Websocket"],
-        ["Path", "/vmess"],
-        ["Apln", "h2, http/1.1"],
-    ]
-
-    print(tabulate(vpn_configuration, tablefmt="grid"))
 
     print("\n")
     print("---------------------------------------------------")
     print(f"VMESS HTTPS : vmess://{encoded_tls}")
     print("---------------------------------------------------")
     print(f"VMESS HTTP  : vmess://{encoded_non_tls}")
-    print("---------------------------------------------------")
-    print(formatted_clash)
     print("---------------------------------------------------")
     print("\n")
 
