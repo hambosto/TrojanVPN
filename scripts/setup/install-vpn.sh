@@ -133,7 +133,7 @@ restart_services() {
 domain=$(cat /root/domain)
 
 # Main execution starts here
-install_necessary
+install_dependency
 install_nginx
 install_vnstat
 block_torrent_and_p2p_traffic
